@@ -10,9 +10,11 @@ const App = () => {
   const handleClick = () => {
     setClicked(true);
     fetch(`/voice/token?identity=${encodeURIComponent(identity)}`)
-      .then(response => response.json())
+      .then((response) => response.json())
       .then(({ token }) => setToken(token));
   };
+
+  console.log({ token });
 
   return (
     <div className="app">

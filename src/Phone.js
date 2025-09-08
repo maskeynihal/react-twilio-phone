@@ -19,20 +19,26 @@ const Phone = ({ token }) => {
 
     device.setup(token, { debug: true });
 
+    console.log({ device });
+
     device.on("ready", () => {
       setDevice(device);
       setState(states.READY);
     });
-    device.on("connect", connection => {
+    device.on("connect", (connection) => {
       console.log("Connect event");
+      console.log({ connection });
       setConn(connection);
       setState(states.ON_CALL);
+      // Automatically dial extension after call is connected
+      // Replace 'wwww1005' with the desired extension
+      connection.sendDigits("wwwwwwwwww1006");
     });
     device.on("disconnect", () => {
       setState(states.READY);
       setConn(null);
     });
-    device.on("incoming", connection => {
+    device.on("incoming", (connection) => {
       setState(states.INCOMING);
       setConn(connection);
       connection.on("reject", () => {
@@ -57,6 +63,7 @@ const Phone = ({ token }) => {
   }, [token]);
 
   const handleCall = () => {
+    console.log({ number, device });
     device.connect({ To: number });
   };
 
